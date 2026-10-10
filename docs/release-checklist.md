@@ -4,9 +4,9 @@ The user requested a private repository first. No action in this refactoring
 changes its visibility or chooses a license on the authors' behalf.
 The user explicitly limited the current work to naval; ECG is out of scope.
 
-- [x] Preserve original source in version history and under `legacy/`.
+- [x] Preserve original source in version history for regression comparisons.
 - [x] Add packaging, CLI/API examples, readable model blocks, and citation metadata.
-- [x] Document augmentation, pooled legacy splits, bound assumptions, and equality behavior.
+- [x] Document augmentation, pooled experiment splits, bound assumptions, and equality behavior.
 - [ ] Select an open-source license with the code owners.
 - [ ] Establish the naval dataset's source, units, and redistribution terms.
 - [ ] Reproduce any paper tables/figures the public README will claim to reproduce.

@@ -18,7 +18,8 @@ Solver tests use the actual naval file and compare against the original equation
 Small constructed inputs in boundary-condition tests check software mechanisms,
 not experimental classification performance.
 
-Keep `legacy/` unchanged. Do not commit solver output directories, license files,
+Source comparisons load the pinned original commit from Git history and require
+a full clone. Do not commit solver output directories, license files,
 credentials, or local environment folders. New experiment evidence should state
 the data split, augmentation, seed, window family, depth, time limit, status, and
 optimality gap. Always distinguish in-sample flow from deterministic prediction

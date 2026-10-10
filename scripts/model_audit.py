@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def original_artifacts(x, y, config):
     reference = runpy.run_path(str(ROOT / "tests/test_solver_regression.py"))
-    ns = reference["legacy_model"](
+    ns = reference["reference_model"](
         x, y, config.discrete_mode, depth=config.depth, return_namespace=True
     )
     features = ns["features"]

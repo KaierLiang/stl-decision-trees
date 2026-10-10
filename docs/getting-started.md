@@ -35,7 +35,7 @@ The notebook uses the same real naval data and model API as the CLI. Its cells
 separate loading, augmentation, model construction, optimization, and evaluation.
 Choose a Python kernel in the environment where the package is installed.
 
-## Convert legacy data once
+## Convert pickle data to NPZ
 
 ```bash
 stl-tree convert data/naval_dataset.pkl data/naval_dataset.npz --trust-pickle

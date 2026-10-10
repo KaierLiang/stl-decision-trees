@@ -2,12 +2,12 @@
 
 This document describes the supplied code, not an independent implementation of
 every experiment or theorem in the paper. Original files are retained byte-for-byte
-under `legacy/` and in the initial Git commit.
+in the initial Git commit, which the source-comparison tests read directly.
 
 ## Data and augmentation
 
 The original scripts pool both dataset partitions, draw a sample without replacement
-using NumPy's legacy random sequence at seed 42, and then apply augmentation:
+using NumPy's RandomState sequence at seed 42, and then apply augmentation:
 
 1. Append a constant-zero channel to each original trajectory.
 2. Find label-1 trajectories in their sampled order.
@@ -17,7 +17,7 @@ using NumPy's legacy random sequence at seed 42, and then apply augmentation:
 
 This construction is part of the supplied experiment. It changes the classification
 problem and must not be treated as generic feature engineering on an unchanged
-dataset. The legacy presets preserve it; the CLI defaults to selecting only the
+dataset. The naval preset preserves it; the CLI defaults to selecting only the
 training partition. The quickstart also uses only that partition. No published
 paper score is asserted by this refactoring.
 
@@ -126,7 +126,7 @@ as a successful verification of the nonzero-robustness assumption.
 - Constants in Gurobi min constraints use the explicit `constant` argument.
 - Both variants share the same named constraint blocks and configuration types.
 - Labels need not be contiguous when building a model; their actual integer IDs
-  are used. The legacy augmentation remains specifically binary.
+  are used. The discrete-feature augmentation remains specifically binary.
 - Solver status and incumbent existence are checked before reading solution values.
 - Feasible time-limited incumbents are exported with their bound/gap and status.
 - The model retains read-only copies of input data, so caller mutations cannot

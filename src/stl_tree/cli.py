@@ -35,8 +35,8 @@ def _parser():
     train.add_argument("--seed", type=int)
     train.add_argument(
         "--augmentation",
-        choices=("legacy", "none"),
-        help="legacy: append/copy; none: input already has a final binary channel",
+        choices=("discrete", "none"),
+        help="discrete: append a binary channel and relabel copies; none: use the input channel",
     )
     train.add_argument("--depth", type=int)
     train.add_argument("--max-window-span", type=int)
@@ -58,7 +58,7 @@ def _run_settings(args):
         "split": "train",
         "samples": 100,
         "seed": 42,
-        "augmentation": "legacy",
+        "augmentation": "discrete",
         "model": {},
         "solver": {},
     }
@@ -75,8 +75,8 @@ def _run_settings(args):
         value = getattr(args, key)
         if value is not None:
             settings[key] = value
-    if settings["augmentation"] not in {"legacy", "none"}:
-        raise ValueError("augmentation must be 'legacy' or 'none'")
+    if settings["augmentation"] not in {"discrete", "none"}:
+        raise ValueError("augmentation must be 'discrete' or 'none'")
     for item in fields(ModelConfig):
         value = getattr(args, item.name)
         if value is not None:
@@ -99,7 +99,7 @@ def _train(args):
     dataset = load_dataset(dataset_path, trusted_pickle=args.trust_pickle)
     x, y = dataset.select(settings["split"])
     x, y, indices = sample_data(x, y, settings["samples"], settings["seed"])
-    if settings["augmentation"] == "legacy":
+    if settings["augmentation"] == "discrete":
         x, y, parents = augment_with_discrete_feature(x, y)
     else:
         parents = np.arange(len(x))

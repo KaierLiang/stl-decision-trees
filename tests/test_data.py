@@ -26,7 +26,8 @@ def test_naval_shape_labels_and_pickle_opt_in():
 
 
 def test_augmentation_and_sampling_match_original_on_real_data():
-    original = runpy.run_path(str(ROOT / "legacy/utility.py"))
+    reference = runpy.run_path(str(ROOT / "scripts/reference_source.py"))
+    original = reference["load_utilities"]()
     dataset = load_dataset(ROOT / "data/naval_dataset.pkl", trusted_pickle=True)
     x, y = dataset.select("combined")
     np.random.seed(42)
@@ -40,7 +41,8 @@ def test_augmentation_and_sampling_match_original_on_real_data():
 
 
 def test_window_family_is_not_restricted():
-    original = runpy.run_path(str(ROOT / "legacy/utility.py"))
+    reference = runpy.run_path(str(ROOT / "scripts/reference_source.py"))
+    original = reference["load_utilities"]()
     windows = generate_windows(61, 500)
     assert len(windows) == 1891
     assert windows == original["generate_combinations"](0, 60, 500)

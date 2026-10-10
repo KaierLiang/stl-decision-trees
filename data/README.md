@@ -18,9 +18,5 @@ here. Verify them before any public release.
 SHA-256 of the supplied pickle:
 `f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34`.
 
-`ecg200_data.pickle` is referenced by `legacy/main_belong.py` but was not included.
-Its historical preset is retained for provenance. The current scope is naval
-only; obtaining or validating ECG is not a prerequisite for this repository.
-
 The model's optional augmentation is documented in [semantics](../docs/semantics.md).
 It adds a binary channel and relabelled copies; those are not raw measurements.

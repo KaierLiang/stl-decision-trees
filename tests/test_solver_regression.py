@@ -3,7 +3,7 @@
 Run on remote labs. The source is evaluated only from tree construction through
 objective construction, skipping its hard-coded I/O, optimization, and output.
 The exist script needs one Gurobi API correction: a numeric min operand is passed
-via 'constant'. These tests use two continuous channels, for which the legacy
+via 'constant'. These tests use two continuous channels, for which the original
 len(feature) index is already the correct discrete channel.
 """
 
@@ -29,11 +29,12 @@ ROOT = Path(__file__).resolve().parents[1]
 pytestmark = pytest.mark.solver
 
 
-def legacy_model(x, y, mode, *, depth=1, return_namespace=False):
+def reference_model(x, y, mode, *, depth=1, return_namespace=False):
     import gurobipy as gp
 
     filename = "main_belong.py" if mode == "exist" else "main_belong_keep_temporal_feature.py"
-    source = (ROOT / "legacy" / filename).read_text(encoding="utf-8")
+    reference = runpy.run_path(str(ROOT / "scripts/reference_source.py"))
+    source = reference["read_source"](filename)
     if mode == "exist":
         old = "[op_vars[f'{op}_{feature}'][node], get_discrete_feature(data[i][feature_idx+len(feature)])],"
         new = (
@@ -58,7 +59,7 @@ def legacy_model(x, y, mode, *, depth=1, return_namespace=False):
         and isinstance(node.value.func, ast.Attribute)
         and node.value.func.attr == "optimize"
     )
-    namespace = runpy.run_path(str(ROOT / "legacy/utility.py"))
+    namespace = reference["load_utilities"]()
     namespace.update(
         Model=gp.Model,
         GRB=gp.GRB,
@@ -83,7 +84,7 @@ def test_original_and_refactored_optima_agree(mode):
     dataset = load_dataset(ROOT / "data/naval_dataset.pkl", trusted_pickle=True)
     x, y, _ = sample_data(*dataset.select("combined"), 8, 42)
     x, y, _ = augment_with_discrete_feature(x, y)
-    original = legacy_model(x, y, mode)
+    original = reference_model(x, y, mode)
     artifacts = build_model(x, y, ModelConfig(depth=1, discrete_mode=mode))
     try:
         original.Params.OutputFlag = 0

@@ -41,7 +41,7 @@ def main():
             output,
             metadata={
                 "split": "train",
-                "augmentation": "legacy",
+                "augmentation": "discrete",
                 "source_indices": indices[parents].tolist(),
             },
         )

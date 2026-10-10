@@ -23,7 +23,7 @@ On Windows PowerShell, replace the activation command with:
 ## Run
 
 ```bash
-stl-tree train --config configs/naval_legacy.json --trust-pickle --output outputs/naval
+stl-tree train --config configs/naval.json --trust-pickle --output outputs/naval
 ```
 
 Results are saved to `outputs/naval/`. Use a new output directory for each run.

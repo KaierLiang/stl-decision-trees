@@ -213,7 +213,7 @@ Machine-readable quickstart evidence is in [quickstart.json](validation/quicksta
 ## Full source naval configuration, finite solver budget
 
 ```bash
-stl-tree train --config configs/naval_legacy.json --trust-pickle --time-limit 120 --output outputs/naval-legacy-validation
+stl-tree train --config configs/naval.json --trust-pickle --time-limit 120 --output outputs/naval-validation
 ```
 
 This run preserves 100 sampled trajectories from the pooled splits, the original
@@ -229,7 +229,7 @@ incumbent tree and summary were exported successfully.
 
 This checks the maintained full-size configuration and timeout path. It is not
 a held-out test, nor evidence of reproducing a published score. Machine-readable
-evidence is in [naval-legacy-120s.json](validation/naval-legacy-120s.json).
+evidence is in [naval-120s.json](validation/naval-120s.json).
 
 ## Re-run on a remote lab
 

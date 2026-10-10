@@ -14,7 +14,7 @@ def test_config_paths_and_explicit_overrides_from_another_directory(tmp_path, mo
         [
             "train",
             "--config",
-            str(ROOT / "configs/naval_legacy.json"),
+            str(ROOT / "configs/naval.json"),
             "--depth",
             "2",
             "--seed",
@@ -28,6 +28,7 @@ def test_config_paths_and_explicit_overrides_from_another_directory(tmp_path, mo
     settings, model, solver = _run_settings(args)
     assert Path(settings["dataset"]).resolve() == ROOT / "data/naval_dataset.pkl"
     assert settings["split"] == "combined" and settings["samples"] == 100
+    assert settings["augmentation"] == "discrete"
     assert model.depth == 2 and model.discrete_mode == "exist"
     assert model.max_window_span == 500
     assert solver.time_limit == 10 and solver.seed == settings["seed"] == 17

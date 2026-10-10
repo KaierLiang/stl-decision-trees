@@ -3,7 +3,7 @@
   "split": "combined",
   "samples": 100,
   "seed": 42,
-  "augmentation": "legacy",
+  "augmentation": "discrete",
   "model": {
     "depth": 3,
     "max_window_span": 500,

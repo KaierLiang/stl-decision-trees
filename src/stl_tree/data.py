@@ -57,9 +57,9 @@ class Dataset:
 
 
 def load_dataset(path, *, trusted_pickle=False):
-    """Load four split arrays from NPZ, or from an explicitly trusted legacy pickle.
+    """Load four split arrays from NPZ, or from an explicitly trusted pickle.
 
-    NPZ keys: X_train, y_train, X_test, y_test. Legacy -1 labels map to 0.
+    NPZ keys: X_train, y_train, X_test, y_test. Original -1 labels map to 0.
     Pickle loading can execute code: only enable it for files you trust.
     """
     path = Path(path)
@@ -72,11 +72,11 @@ def load_dataset(path, *, trusted_pickle=False):
             arrays = [archive[key] for key in keys]
     elif path.suffix.lower() in {".pkl", ".pickle"}:
         if not trusted_pickle:
-            raise ValueError("Legacy pickle requires trusted_pickle=True / --trust-pickle")
+            raise ValueError("Pickle requires trusted_pickle=True / --trust-pickle")
         with path.open("rb") as stream:
             arrays = pickle.load(stream)
         if not isinstance(arrays, (list, tuple)) or len(arrays) != 4:
-            raise ValueError("Legacy pickle must contain [X_train, y_train, X_test, y_test]")
+            raise ValueError("Pickle must contain [X_train, y_train, X_test, y_test]")
     else:
         raise ValueError("Dataset extension must be .npz, .pkl, or .pickle")
     train_x, train_y, test_x, test_y = arrays
@@ -109,7 +109,7 @@ def augment_with_discrete_feature(signals, labels):
     """
     x, y = validate_data(signals, labels)
     if not set(np.unique(y)).issubset({0, 1}):
-        raise ValueError("Legacy augmentation requires binary labels 0 and 1")
+        raise ValueError("Discrete-feature augmentation requires binary labels 0 and 1")
     count, _, horizon = x.shape
     originals = np.concatenate((x, np.zeros((count, 1, horizon))), axis=1)
     positive_indices = np.flatnonzero(y == 1)

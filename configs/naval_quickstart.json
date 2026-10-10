@@ -3,7 +3,7 @@
   "split": "train",
   "samples": 12,
   "seed": 42,
-  "augmentation": "legacy",
+  "augmentation": "discrete",
   "model": {
     "depth": 1,
     "max_window_span": 500,
