@@ -1,0 +1,52 @@
+{
+  "status": "TIME_LIMIT",
+  "status_code": 9,
+  "has_incumbent": true,
+  "proven_optimal": false,
+  "runtime_seconds": 120.04067921638489,
+  "objective": 105.0,
+  "objective_bound": 123.0,
+  "mip_gap": 0.17142857142857143,
+  "training_samples": 123,
+  "max_flow_training_fraction": 0.8536585365853658,
+  "deterministic_training_accuracy": 0.8373983739837398,
+  "tie_samples": 3,
+  "solver_config": {
+    "time_limit": 120.0,
+    "mip_gap": 0.0,
+    "threads": 1,
+    "seed": 42,
+    "output_flag": true
+  },
+  "model_config": {
+    "depth": 3,
+    "max_window_span": 500,
+    "discrete_mode": "belong",
+    "max_rho": 200.0,
+    "big_m": 250.0
+  },
+  "model_size": {
+    "variables": 29176,
+    "linear_constraints": 18472,
+    "general_constraints": 4305,
+    "windows": 1891
+  },
+  "prediction_tie_break": "left",
+  "prediction_tolerance": 1e-06,
+  "notes": [
+    "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
+    "The original zero-margin constraints permit either branch at robustness zero."
+  ],
+  "metadata": {
+    "dataset": "naval_dataset.pkl",
+    "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+    "split": "combined",
+    "augmentation": "legacy",
+    "requested_samples": 100,
+    "sampling_seed": 42,
+    "python": "3.13.9",
+    "numpy": "2.5.3",
+    "build_seconds": 4.443056788295507,
+    "gurobi": "13.0.3"
+  }
+}

@@ -1,0 +1,8 @@
+include README.md CONTRIBUTING.md CITATION.cff
+recursive-include configs *.json
+recursive-include data *.pkl *.md
+recursive-include docs *.md *.json
+recursive-include examples *.py *.ipynb
+recursive-include legacy *.py *.md
+recursive-include scripts *.sh
+recursive-include tests *.py

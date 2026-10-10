@@ -1,0 +1,19 @@
+{
+  "dataset": "../data/ecg200_data.pickle",
+  "split": "combined",
+  "samples": 200,
+  "seed": 42,
+  "augmentation": "legacy",
+  "model": {
+    "depth": 3,
+    "max_window_span": 500,
+    "discrete_mode": "exist",
+    "max_rho": 200.0,
+    "big_m": 250.0
+  },
+  "solver": {
+    "mip_gap": 0.0,
+    "threads": 1,
+    "seed": 42
+  }
+}
