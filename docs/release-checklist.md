@@ -10,8 +10,9 @@ changes its visibility or chooses a license on the authors' behalf.
 - [ ] Establish the naval dataset's source, units, and redistribution terms.
 - [ ] Supply the original ECG dataset if that experiment should be runnable.
 - [ ] Reproduce any paper tables/figures the public README will claim to reproduce.
-- [ ] Decide whether to retain or revise the inherited zero-robustness and belong semantics.
+- [ ] Resolve the confirmed zero-robustness classification defect; see the full validation report.
+- [ ] Decide how to document or revise the inherited temporal belong restriction.
 - [ ] Obtain the user's instruction to make the repository public.
 
-The last three unresolved technical items are not silently fixed or represented as
+Unresolved technical items are not silently fixed or represented as
 completed by an onboarding solve. Current validation evidence is recorded separately.

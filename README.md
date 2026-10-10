@@ -18,6 +18,13 @@ the naval dataset, a CLI, a Python API, and the original scripts for comparison.
 > pools the original train/test splits. See [experiment semantics](docs/semantics.md)
 > before interpreting any score. Gurobi and a suitable license are required to train.
 
+> **Confirmed formulation defect.** The original zero-margin routing can count
+> identical inputs with opposite labels as two correct classifications. Full naval
+> solves reach a proven flow optimum of 123/123, while the saved trees predict
+> 121/123 under the documented tie policy. The refactor matches the original
+> equations; this does **not** establish that the inherited objective is correct
+> for deterministic classification. See the [full audit](docs/validation.md).
+
 ## Install
 
 ```bash

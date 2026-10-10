@@ -4,5 +4,5 @@ recursive-include data *.pkl *.md
 recursive-include docs *.md *.json
 recursive-include examples *.py *.ipynb
 recursive-include legacy *.py *.md
-recursive-include scripts *.sh
+recursive-include scripts *.sh *.py
 recursive-include tests *.py

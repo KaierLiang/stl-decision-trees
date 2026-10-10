@@ -1,0 +1,243 @@
+{
+  "signals": [
+    [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        2.0,
+        2.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    [
+      [
+        1.0,
+        1.0
+      ],
+      [
+        2.0,
+        2.0
+      ],
+      [
+        0.0,
+        0.0
+      ]
+    ]
+  ],
+  "labels": [
+    0,
+    1
+  ],
+  "deterministic_classifier_upper_bound": 1,
+  "runs": [
+    {
+      "mode": "exist",
+      "variant": "original",
+      "status": "OPTIMAL",
+      "flow_objective": 2.0,
+      "objective_bound": 2.0,
+      "left_policy_predictions": [
+        0,
+        0
+      ],
+      "right_policy_predictions": [
+        1,
+        1
+      ],
+      "left_policy_correct": 1,
+      "right_policy_correct": 1,
+      "tree": {
+        "schema_version": 1,
+        "nodes": {
+          "0": {
+            "kind": "continuous",
+            "operation": "less",
+            "feature": 0,
+            "threshold": 1.0,
+            "window": [
+              1,
+              1
+            ]
+          },
+          "1": {
+            "kind": "label",
+            "label": 0
+          },
+          "2": {
+            "kind": "label",
+            "label": 1
+          }
+        },
+        "feature_count": 3,
+        "horizon": 2,
+        "discrete_mode": "exist"
+      },
+      "sample_left_flow": [
+        1.0,
+        -0.0
+      ],
+      "sample_right_flow": [
+        -0.0,
+        1.0
+      ]
+    },
+    {
+      "mode": "exist",
+      "variant": "refactored",
+      "status": "OPTIMAL",
+      "flow_objective": 2.0,
+      "objective_bound": 2.0,
+      "left_policy_predictions": [
+        0,
+        0
+      ],
+      "right_policy_predictions": [
+        1,
+        1
+      ],
+      "left_policy_correct": 1,
+      "right_policy_correct": 1,
+      "tree": {
+        "schema_version": 1,
+        "nodes": {
+          "0": {
+            "kind": "continuous",
+            "operation": "less",
+            "feature": 0,
+            "threshold": 1.0,
+            "window": [
+              1,
+              1
+            ]
+          },
+          "1": {
+            "kind": "label",
+            "label": 0
+          },
+          "2": {
+            "kind": "label",
+            "label": 1
+          }
+        },
+        "feature_count": 3,
+        "horizon": 2,
+        "discrete_mode": "exist"
+      },
+      "sample_left_flow": [
+        1.0,
+        -0.0
+      ],
+      "sample_right_flow": [
+        -0.0,
+        1.0
+      ]
+    },
+    {
+      "mode": "belong",
+      "variant": "original",
+      "status": "OPTIMAL",
+      "flow_objective": 2.0,
+      "objective_bound": 2.0,
+      "left_policy_predictions": [
+        0,
+        0
+      ],
+      "right_policy_predictions": [
+        1,
+        1
+      ],
+      "left_policy_correct": 1,
+      "right_policy_correct": 1,
+      "tree": {
+        "schema_version": 1,
+        "nodes": {
+          "0": {
+            "kind": "continuous",
+            "operation": "less",
+            "feature": 0,
+            "threshold": 1.0,
+            "window": [
+              0,
+              0
+            ]
+          },
+          "1": {
+            "kind": "label",
+            "label": 0
+          },
+          "2": {
+            "kind": "label",
+            "label": 1
+          }
+        },
+        "feature_count": 3,
+        "horizon": 2,
+        "discrete_mode": "belong"
+      },
+      "sample_left_flow": [
+        1.0,
+        0.0
+      ],
+      "sample_right_flow": [
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "mode": "belong",
+      "variant": "refactored",
+      "status": "OPTIMAL",
+      "flow_objective": 2.0,
+      "objective_bound": 2.0,
+      "left_policy_predictions": [
+        0,
+        0
+      ],
+      "right_policy_predictions": [
+        1,
+        1
+      ],
+      "left_policy_correct": 1,
+      "right_policy_correct": 1,
+      "tree": {
+        "schema_version": 1,
+        "nodes": {
+          "0": {
+            "kind": "continuous",
+            "operation": "less",
+            "feature": 0,
+            "threshold": 1.0,
+            "window": [
+              0,
+              0
+            ]
+          },
+          "1": {
+            "kind": "label",
+            "label": 0
+          },
+          "2": {
+            "kind": "label",
+            "label": 1
+          }
+        },
+        "feature_count": 3,
+        "horizon": 2,
+        "discrete_mode": "belong"
+      },
+      "sample_left_flow": [
+        1.0,
+        0.0
+      ],
+      "sample_right_flow": [
+        0.0,
+        1.0
+      ]
+    }
+  ]
+}

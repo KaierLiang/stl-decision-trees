@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 pytestmark = pytest.mark.solver
 
 
-def legacy_model(x, y, mode, *, depth=1):
+def legacy_model(x, y, mode, *, depth=1, return_namespace=False):
     import gurobipy as gp
 
     filename = "main_belong.py" if mode == "exist" else "main_belong_keep_temporal_feature.py"
@@ -75,7 +75,7 @@ def legacy_model(x, y, mode, *, depth=1):
         compile(ast.Module(body=statements[start:stop], type_ignores=[]), filename, "exec"),
         namespace,
     )
-    return namespace["m"]
+    return namespace if return_namespace else namespace["m"]
 
 
 @pytest.mark.parametrize("mode", ["exist", "belong"])

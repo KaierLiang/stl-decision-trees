@@ -82,6 +82,13 @@ policy explicit. `LearnedTree.predict` raises on a tie by default; callers may
 select `left` or `right`. Introducing a positive margin or a forced tie policy in
 the training model would be a formulation change and has not been done here.
 
+The follow-up [full audit](validation.md) confirms that this is a correctness
+defect for deterministic classification, not merely a formatting or reporting
+choice: both original variants can assign total correct flow to identical inputs
+with opposite labels. Any deterministic prediction rule must give those inputs
+the same label. The test suite retains this counterexample explicitly; it is not
+marked as a repaired behavior.
+
 ## Repairs and engineering changes
 
 - The final binary channel is addressed by its actual position. The original
@@ -93,6 +100,8 @@ the training model would be a formulation change and has not been done here.
   are used. The legacy augmentation remains specifically binary.
 - Solver status and incumbent existence are checked before reading solution values.
 - Feasible time-limited incumbents are exported with their bound/gap and status.
+- The model retains read-only copies of input data, so caller mutations cannot
+  change the data used to score already constructed coefficients.
 - Thread count and seeds are explicit. Different solver versions or seeds may
   choose different trees with the same objective.
 

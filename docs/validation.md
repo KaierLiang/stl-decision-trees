@@ -3,10 +3,91 @@
 All execution checks below ran on the remote `lab` machine on **2026-10-10**.
 No local Python tests, local optimization, or GitHub-hosted tests were run.
 
-These checks validate the refactoring and onboarding workflow. They do not
-reproduce all paper experiments. The ECG data were unavailable, the original
-zero-robustness ambiguity remains, and a finite-budget solve of the full naval
-configuration is not a global-optimality certificate.
+**Current conclusion:** both complete naval variants and both original source
+models reach the same proven flow optimum, and the formulations match coefficient
+for coefficient. However, a confirmed defect in the inherited zero-margin routing
+means this objective can overcount deterministic classification. The code cannot
+yet be certified as a correct deterministic-classification learner. The original
+ECG file is also unavailable; that full experiment has not been validated.
+
+## Full audit after the initial time-limited checks
+
+The user requested complete runs instead of stopping at a solver time limit.
+The follow-up retains **100 original samples, 123 after augmentation, depth 3,
+both continuous features, the binary channel, all 61 time steps, and all 1,891
+windows**. No time limit, positive gap tolerance, window pruning, or reduced tree
+family was used for the completed runs.
+
+| Full model | Flow objective | Upper bound | Gap | Fixed-policy predictions |
+| --- | ---: | ---: | ---: | ---: |
+| Refactored `exist` | 123 | 123 | 0 | 121/123 |
+| Original `exist` | 123 | 123 | 0 | 121/123 |
+| Refactored `belong` | 123 | 123 | 0 | 121/123 |
+| Original `belong` | 123 | 123 | 0 | 121/123 |
+
+The first `exist` solve started without a supplied incumbent and took 304.45
+seconds with four threads. Its learned tree was then used as a **MIP start**, not
+as fixed constraints, in the two full audit solves. On these constant binary
+channels, a global `exist` node can seed `belong` with interval `[0,0]`. Every
+interval remains available to the optimizer. Each original source model received
+the corresponding refactored solution as a full MIP start and independently
+proved the same bound. The duplicate `belong` solve without a supplied incumbent
+was stopped after the complete warm-started proof was available; it had reached
+122/123. Warm-started run times are recorded as such and are not performance
+benchmarks against the initial solve.
+
+The comparison ignores names and construction order and compares all variable
+types, bounds, objective coefficients, linear row senses/RHS/coefficient multisets,
+MIN operands/constants, objective sense, and objective constant. This covers
+**6,571,444 nonzero coefficients for `exist` and 7,182,075 for `belong`**. Each
+complete solution was then independently checked against every constraint and
+its sample flow paths. These checks enforce the inherited equations, including
+their ambiguous equality behavior; they do not excuse that semantic defect.
+
+Evidence:
+
+- [Complete solves and constraint audits](validation/complete-naval-audit.json)
+- [Initial complete `exist` solve without a supplied incumbent](validation/full-exist-cold.json)
+- [Full `exist` coefficient comparison](validation/full-model-exist.json)
+- [Full `belong` coefficient comparison](validation/full-model-belong.json)
+- [Counterexample in all four implementations](validation/equality-counterexample.json)
+
+### Defect reproduced independently
+
+Two identical inputs have continuous channels `[1,1]` and `[2,2]`, the same binary
+channel `[0,0]`, and opposite labels 0 and 1. Every deterministic classifier must
+give them the same prediction, so at most one can be correct. Both original
+models and both refactored models nevertheless prove a flow objective of two by
+routing the samples in opposite directions at a zero-robustness predicate.
+
+This is a correctness counterexample, not a synthetic performance benchmark.
+The original constraints remain unchanged pending agreement on a formulation
+change. Merely achieving zero MIP gap does not resolve it.
+
+### Refactoring bug fixed
+
+`build_model` originally retained a reference to the caller's signal array. A
+caller mutation after construction could make reported prediction scores use
+different data from the already frozen MILP coefficients. The model now owns
+read-only copies of its input signals and labels. A regression test failed on
+the previous implementation and passes after the repair.
+
+After the repair, **22 tests passed in 4.44 seconds** on the remote lab. Added
+checks include an independent exhaustive depth-1 oracle, depth-2 coefficient
+comparisons, multiclass/noncontiguous labels at depth zero, immutable input
+snapshots, and the known equality counterexample. The latter records a confirmed
+defect; its passing test is not evidence that the defect has been fixed.
+
+```bash
+# Complete source/refactor solves, with every original candidate available.
+python scripts/full_validation.py --mode exist --output outputs/full-exist-audit
+python scripts/full_validation.py --mode belong --output outputs/full-belong-audit
+
+# Reproduce the known semantic defect without running a large experiment.
+python scripts/reproduce_equality_issue.py --output outputs/equality-issue
+```
+
+The earlier checks below are retained as historical evidence.
 
 ## Environment
 

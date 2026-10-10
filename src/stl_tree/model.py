@@ -201,6 +201,11 @@ def build_model(signals, labels, config=None, *, env=None):
 
     config = config or ModelConfig()
     x, y = validate_data(signals, labels)
+    # Coefficients are frozen at build time. Keep the data used for extraction
+    # and scoring equally stable if the caller later reuses its input buffers.
+    x, y = x.copy(), y.copy()
+    x.setflags(write=False)
+    y.setflags(write=False)
     if x.shape[1] < 2:
         raise ValueError("Provide at least one continuous channel and a final binary channel")
     if not np.isin(x[:, -1, :], [0, 1]).all():

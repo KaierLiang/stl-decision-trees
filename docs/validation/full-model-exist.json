@@ -1,0 +1,23 @@
+{
+  "identical": true,
+  "checks": {
+    "variables": true,
+    "linear_rows": true,
+    "general_constraints": true,
+    "model_sense": true,
+    "objective_constant": true,
+    "nonzeros": true
+  },
+  "variables": 28315,
+  "linear_constraints": 16750,
+  "general_constraints": 4305,
+  "nonzeros": 6571444,
+  "linear_row_sha256": "4a89065af7391e57f5897f415ff12478b9a148ed1f303e18da7b82ae1bb9ff86",
+  "samples_before_augmentation": 100,
+  "samples_after_augmentation": 123,
+  "depth": 3,
+  "windows": 1891,
+  "mode": "exist",
+  "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+  "comparison_seconds": 4.855550367385149
+}
