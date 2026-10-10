@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "nodes": {
+    "0": {
+      "kind": "continuous",
+      "operation": "greater",
+      "feature": 0,
+      "threshold": 24.564062893815763,
+      "window": [
+        42,
+        55
+      ]
+    },
+    "1": {
+      "kind": "continuous",
+      "operation": "greater",
+      "feature": 1,
+      "threshold": 28.749641390368875,
+      "window": [
+        32,
+        50
+      ]
+    },
+    "3": {
+      "kind": "exist",
+      "feature": 2
+    },
+    "7": {
+      "kind": "label",
+      "label": 0
+    },
+    "8": {
+      "kind": "label",
+      "label": 0
+    },
+    "4": {
+      "kind": "continuous",
+      "operation": "greater",
+      "feature": 0,
+      "threshold": 39.131845143539955,
+      "window": [
+        15,
+        27
+      ]
+    },
+    "9": {
+      "kind": "label",
+      "label": 1
+    },
+    "10": {
+      "kind": "label",
+      "label": 1
+    },
+    "2": {
+      "kind": "exist",
+      "feature": 2
+    },
+    "5": {
+      "kind": "label",
+      "label": 0
+    },
+    "6": {
+      "kind": "continuous",
+      "operation": "greater",
+      "feature": 1,
+      "threshold": 26.667893657424408,
+      "window": [
+        12,
+        12
+      ]
+    },
+    "13": {
+      "kind": "label",
+      "label": 1
+    },
+    "14": {
+      "kind": "label",
+      "label": 0
+    }
+  },
+  "feature_count": 3,
+  "horizon": 61,
+  "discrete_mode": "exist"
+}

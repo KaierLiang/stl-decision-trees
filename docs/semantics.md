@@ -74,7 +74,13 @@ channel at an active `belong` node.
 - At zero robustness both signs are feasible. Different samples can therefore
   take different branches at the same threshold equality in the MILP.
 
-That last point matters for the interpretation of “accuracy.” The objective counts
+The intended setting, clarified by the author, assumes noisy data and excludes
+zero robustness. The zero-margin training equations remain unchanged. Since a
+threshold is learned from the samples, noise alone does not guarantee that an
+optimizer returns thresholds strictly between sample extrema. Finite-precision
+solutions can also sit a few trillionths from a boundary.
+
+That matters for the interpretation of “accuracy.” The objective counts
 correctly labelled flow in the optimization model. It need not equal the accuracy
 of a deterministic function of the input signals. This refactoring reports both
 values, counts prediction ties at tolerance `1e-6`, and makes the prediction tie
@@ -82,12 +88,35 @@ policy explicit. `LearnedTree.predict` raises on a tie by default; callers may
 select `left` or `right`. Introducing a positive margin or a forced tie policy in
 the training model would be a formulation change and has not been done here.
 
-The follow-up [full audit](validation.md) confirms that this is a correctness
-defect for deterministic classification, not merely a formatting or reporting
-choice: both original variants can assign total correct flow to identical inputs
-with opposite labels. Any deterministic prediction rule must give those inputs
-the same label. The test suite retains this counterexample explicitly; it is not
-marked as a repaired behavior.
+The equality counterexample with identical inputs and opposite labels is outside
+the stated nonzero-robustness assumption. It remains an explicit boundary test;
+it is not evidence against the method under that assumption. The raw naval
+export separately revealed a numerical issue: robustness near `1e-12` could be
+routed against its sign within solver feasibility tolerance. Reducing prediction
+tolerance to zero did not fix that mismatch.
+
+### Numerically stable export
+
+For a continuous node near a routed boundary, export intersects the original
+threshold bounds, **all** continuous robustness bounds (including unselected
+features/operations), and the incumbent's left/right routing requirements.
+When this interval has a numerically stable interior, it selects its midpoint.
+Otherwise it retains the raw threshold and reports the unresolved boundary.
+No training margin, additional constraint, window pruning, or changed sample is
+introduced. The solver model and raw solution are untouched. The exported tree
+may choose a different prediction for unseen signals near the old threshold,
+as is possible when selecting a different equally optimal threshold.
+
+`tree.json` is the resulting export; `tree-raw.json` retains the exact solver
+thresholds. `summary.json` records changes, raw prediction accuracy, and whether
+all admitted sample flows have verified strict routing. Prediction ties remain
+explicit. `solve(..., stabilize=False)` disables this step; use it for custom
+models with extra constraints or objectives restricting thresholds.
+
+The [full audit](validation.md) independently reconstructs the export's auxiliary
+variables and checks every original linear/general constraint and the objective,
+in addition to checking predictions. An empty strict interval is never treated
+as a successful verification of the nonzero-robustness assumption.
 
 ## Repairs and engineering changes
 
@@ -105,7 +134,7 @@ marked as a repaired behavior.
 - Thread count and seeds are explicit. Different solver versions or seeds may
   choose different trees with the same objective.
 
-These repairs preserve the intended channel selection and source equations. They
-do not resolve the inherited zero-robustness ambiguity or the temporal belong
-restriction. The regression tests compare source and refactored objectives and
-model sizes on the same actual naval trajectories.
+These repairs preserve the intended channel selection and source equations.
+Zero robustness remains outside the stated assumption, and the temporal belong
+restriction remains in force. Regression tests compare source and refactored
+objectives and constraints on the same actual naval trajectories.

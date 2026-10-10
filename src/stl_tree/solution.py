@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 
 from .config import SolverConfig
+from .postprocess import stabilize_thresholds
 
 
 @dataclass
@@ -142,6 +143,8 @@ class SolveResult:
     deterministic_training_accuracy: float | None
     tie_samples: int | None
     tree: LearnedTree | None
+    raw_tree: LearnedTree | None
+    threshold_stabilization: dict | None
     solver_config: dict
     model_config: dict
     model_size: dict
@@ -149,18 +152,23 @@ class SolveResult:
     def to_dict(self):
         value = asdict(self)
         value.pop("tree")
+        value.pop("raw_tree")
         value["prediction_tie_break"] = "left"
         value["prediction_tolerance"] = 1e-6
         value["notes"] = [
             "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
             "The original zero-margin constraints permit either branch at robustness zero.",
+            "Export thresholds may move within existing feasible intervals; see threshold_stabilization.",
         ]
         return value
 
     def save(self, directory, *, metadata=None):
         directory = Path(directory)
         directory.mkdir(parents=True, exist_ok=True)
-        if any((directory / name).exists() for name in ("summary.json", "tree.json", "tree.txt")):
+        if any(
+            (directory / name).exists()
+            for name in ("summary.json", "tree.json", "tree.txt", "tree-raw.json")
+        ):
             raise FileExistsError(f"Result already exists in {directory}; choose a fresh directory")
         summary = self.to_dict()
         summary["metadata"] = metadata or {}
@@ -171,6 +179,7 @@ class SolveResult:
         if self.tree is not None:
             self.tree.save(directory / "tree.json")
             (directory / "tree.txt").write_text(self.tree.format() + "\n", encoding="utf-8")
+            self.raw_tree.save(directory / "tree-raw.json")
 
 
 def _extract_tree(artifacts):
@@ -218,11 +227,14 @@ def _extract_tree(artifacts):
     )
 
 
-def solve(artifacts, config=None, *, log_file=None):
+def solve(artifacts, config=None, *, log_file=None, stabilize=True):
     """Solve and report any incumbent, including after a time limit.
 
     Never access solution values without an incumbent. The caller owns the
     model lifetime; call artifacts.model.dispose() after exporting what you need.
+    By default, export numerically stable thresholds preserving the incumbent's
+    sample flows. Set stabilize=False for exact raw thresholds, or after adding
+    custom constraints to the base model that could restrict thresholds.
     """
     import gurobipy as gp
 
@@ -260,7 +272,17 @@ def solve(artifacts, config=None, *, log_file=None):
         f"STATUS_{model.Status}",
     )
     incumbent = model.SolCount > 0
-    tree = _extract_tree(artifacts) if incumbent else None
+    raw_tree = _extract_tree(artifacts) if incumbent else None
+    tree, stabilization = raw_tree, None
+    if raw_tree is not None and stabilize:
+        tree, stabilization = stabilize_thresholds(artifacts, raw_tree)
+        raw_prediction, raw_ties = raw_tree.predict(
+            artifacts.signals, tie_break="left", return_ties=True
+        )
+        stabilization["raw_tree_training_accuracy"] = float(
+            np.mean(raw_prediction == artifacts.labels)
+        )
+        stabilization["raw_tree_tie_samples"] = int(raw_ties.sum())
     objective = float(model.ObjVal) if incumbent else None
     try:
         bound = float(model.ObjBound)
@@ -297,6 +319,8 @@ def solve(artifacts, config=None, *, log_file=None):
         accuracy,
         tie_count,
         tree,
+        raw_tree,
+        stabilization,
         config.to_dict(),
         artifacts.config.to_dict(),
         {

@@ -1,0 +1,507 @@
+{
+  "date": "2026-10-10",
+  "environment": "remote lab",
+  "validation_scope": "naval_only",
+  "assumption": "Noisy data with zero robustness excluded, as clarified by the author",
+  "training_formulation_changed": false,
+  "export_processing": "Interior thresholds preserve the incumbent flow and original feasibility; raw solver trees are retained",
+  "samples_before_augmentation": 100,
+  "samples_after_augmentation": 123,
+  "depth": 3,
+  "horizon": 61,
+  "windows": 1891,
+  "verified_for_recorded_naval_runs": true,
+  "cases": {
+    "exist": {
+      "comparison": {
+        "identical": true,
+        "checks": {
+          "variables": true,
+          "linear_rows": true,
+          "general_constraints": true,
+          "model_sense": true,
+          "objective_constant": true,
+          "nonzeros": true
+        },
+        "variables": 28315,
+        "linear_constraints": 16750,
+        "general_constraints": 4305,
+        "nonzeros": 6571444,
+        "linear_row_sha256": "4a89065af7391e57f5897f415ff12478b9a148ed1f303e18da7b82ae1bb9ff86",
+        "samples_before_augmentation": 100,
+        "samples_after_augmentation": 123,
+        "depth": 3,
+        "windows": 1891,
+        "mode": "exist",
+        "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+        "comparison_seconds": 4.693585094064474
+      },
+      "original": {
+        "summary": {
+          "status": "OPTIMAL",
+          "status_code": 2,
+          "has_incumbent": true,
+          "proven_optimal": true,
+          "runtime_seconds": 14.922966003417969,
+          "objective": 123.0,
+          "objective_bound": 123.0,
+          "mip_gap": 0.0,
+          "training_samples": 123,
+          "max_flow_training_fraction": 1.0,
+          "deterministic_training_accuracy": 1.0,
+          "tie_samples": 0,
+          "threshold_stabilization": {
+            "method": "interior_thresholds_preserving_incumbent_flow",
+            "tolerance": 1e-06,
+            "changed_nodes": [
+              {
+                "node": 0,
+                "raw_threshold": 24.46280129548508,
+                "export_threshold": 24.564062893815763,
+                "feasible_lower": 24.462801295486095,
+                "feasible_upper": 24.66532449214543,
+                "minimum_routed_absolute_robustness": 0.10126159832966763
+              },
+              {
+                "node": 6,
+                "raw_threshold": 25.775625198473907,
+                "export_threshold": 26.667893657424408,
+                "feasible_lower": 25.775625198475854,
+                "feasible_upper": 27.56016211637296,
+                "minimum_routed_absolute_robustness": 0.8922684589485534
+              }
+            ],
+            "unresolved_nodes": [],
+            "routed_branch_mismatches": 0,
+            "near_zero_routed_decisions": 0,
+            "minimum_routed_absolute_robustness": 0.046817464383224205,
+            "verified_strict_routing": true,
+            "raw_tree_training_accuracy": 0.983739837398374,
+            "raw_tree_tie_samples": 3
+          },
+          "solver_config": {
+            "time_limit": null,
+            "mip_gap": 0.0,
+            "threads": 2,
+            "seed": 42,
+            "output_flag": true
+          },
+          "model_config": {
+            "depth": 3,
+            "max_window_span": 500,
+            "discrete_mode": "exist",
+            "max_rho": 200.0,
+            "big_m": 250.0
+          },
+          "model_size": {
+            "variables": 28315,
+            "linear_constraints": 16750,
+            "general_constraints": 4305,
+            "windows": 1891
+          },
+          "prediction_tie_break": "left",
+          "prediction_tolerance": 1e-06,
+          "notes": [
+            "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
+            "The original zero-margin constraints permit either branch at robustness zero.",
+            "Export thresholds may move within existing feasible intervals; see threshold_stabilization."
+          ],
+          "metadata": {
+            "warm_start_from_refactor": true
+          }
+        },
+        "raw_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.9468870959826745e-12,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 3,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        "export_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.7763568394002505e-15,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 0,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        }
+      },
+      "refactored": {
+        "summary": {
+          "status": "OPTIMAL",
+          "status_code": 2,
+          "has_incumbent": true,
+          "proven_optimal": true,
+          "runtime_seconds": 14.165065050125122,
+          "objective": 123.0,
+          "objective_bound": 123.0,
+          "mip_gap": 0.0,
+          "training_samples": 123,
+          "max_flow_training_fraction": 1.0,
+          "deterministic_training_accuracy": 1.0,
+          "tie_samples": 0,
+          "threshold_stabilization": {
+            "method": "interior_thresholds_preserving_incumbent_flow",
+            "tolerance": 1e-06,
+            "changed_nodes": [
+              {
+                "node": 0,
+                "raw_threshold": 24.46280129548508,
+                "export_threshold": 24.564062893815763,
+                "feasible_lower": 24.462801295486095,
+                "feasible_upper": 24.66532449214543,
+                "minimum_routed_absolute_robustness": 0.10126159832966763
+              },
+              {
+                "node": 6,
+                "raw_threshold": 25.775625198473907,
+                "export_threshold": 26.667893657424408,
+                "feasible_lower": 25.775625198475854,
+                "feasible_upper": 27.56016211637296,
+                "minimum_routed_absolute_robustness": 0.8922684589485534
+              }
+            ],
+            "unresolved_nodes": [],
+            "routed_branch_mismatches": 0,
+            "near_zero_routed_decisions": 0,
+            "minimum_routed_absolute_robustness": 0.046817464383224205,
+            "verified_strict_routing": true,
+            "raw_tree_training_accuracy": 0.983739837398374,
+            "raw_tree_tie_samples": 3
+          },
+          "solver_config": {
+            "time_limit": null,
+            "mip_gap": 0.0,
+            "threads": 2,
+            "seed": 42,
+            "output_flag": true
+          },
+          "model_config": {
+            "depth": 3,
+            "max_window_span": 500,
+            "discrete_mode": "exist",
+            "max_rho": 200.0,
+            "big_m": 250.0
+          },
+          "model_size": {
+            "variables": 28315,
+            "linear_constraints": 16750,
+            "general_constraints": 4305,
+            "windows": 1891
+          },
+          "prediction_tie_break": "left",
+          "prediction_tolerance": 1e-06,
+          "notes": [
+            "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
+            "The original zero-margin constraints permit either branch at robustness zero.",
+            "Export thresholds may move within existing feasible intervals; see threshold_stabilization."
+          ],
+          "metadata": {
+            "comparison": {
+              "identical": true,
+              "checks": {
+                "variables": true,
+                "linear_rows": true,
+                "general_constraints": true,
+                "model_sense": true,
+                "objective_constant": true,
+                "nonzeros": true
+              },
+              "variables": 28315,
+              "linear_constraints": 16750,
+              "general_constraints": 4305,
+              "nonzeros": 6571444,
+              "linear_row_sha256": "4a89065af7391e57f5897f415ff12478b9a148ed1f303e18da7b82ae1bb9ff86",
+              "samples_before_augmentation": 100,
+              "samples_after_augmentation": 123,
+              "depth": 3,
+              "windows": 1891,
+              "mode": "exist",
+              "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+              "comparison_seconds": 4.693585094064474
+            }
+          }
+        },
+        "raw_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.9468870959826745e-12,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 3,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        "export_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.7763568394002505e-15,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 0,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        }
+      }
+    },
+    "belong": {
+      "comparison": {
+        "identical": true,
+        "checks": {
+          "variables": true,
+          "linear_rows": true,
+          "general_constraints": true,
+          "model_sense": true,
+          "objective_constant": true,
+          "nonzeros": true
+        },
+        "variables": 29176,
+        "linear_constraints": 18472,
+        "general_constraints": 4305,
+        "nonzeros": 7182075,
+        "linear_row_sha256": "369898854fa7946b47a7825f6baf7e3df60de79b11be225c52f3745fc2e635af",
+        "samples_before_augmentation": 100,
+        "samples_after_augmentation": 123,
+        "depth": 3,
+        "windows": 1891,
+        "mode": "belong",
+        "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+        "comparison_seconds": 5.495327781885862
+      },
+      "original": {
+        "summary": {
+          "status": "OPTIMAL",
+          "status_code": 2,
+          "has_incumbent": true,
+          "proven_optimal": true,
+          "runtime_seconds": 23.054473876953125,
+          "objective": 123.0,
+          "objective_bound": 123.0,
+          "mip_gap": 0.0,
+          "training_samples": 123,
+          "max_flow_training_fraction": 1.0,
+          "deterministic_training_accuracy": 1.0,
+          "tie_samples": 0,
+          "threshold_stabilization": {
+            "method": "interior_thresholds_preserving_incumbent_flow",
+            "tolerance": 1e-06,
+            "changed_nodes": [
+              {
+                "node": 0,
+                "raw_threshold": 24.46280129548508,
+                "export_threshold": 24.564062893815763,
+                "feasible_lower": 24.462801295486095,
+                "feasible_upper": 24.66532449214543,
+                "minimum_routed_absolute_robustness": 0.10126159832966763
+              },
+              {
+                "node": 6,
+                "raw_threshold": 25.775625198473907,
+                "export_threshold": 26.667893657424408,
+                "feasible_lower": 25.775625198475854,
+                "feasible_upper": 27.56016211637296,
+                "minimum_routed_absolute_robustness": 0.8922684589485534
+              }
+            ],
+            "unresolved_nodes": [],
+            "routed_branch_mismatches": 0,
+            "near_zero_routed_decisions": 0,
+            "minimum_routed_absolute_robustness": 0.046817464383224205,
+            "verified_strict_routing": true,
+            "raw_tree_training_accuracy": 0.983739837398374,
+            "raw_tree_tie_samples": 3
+          },
+          "solver_config": {
+            "time_limit": null,
+            "mip_gap": 0.0,
+            "threads": 2,
+            "seed": 42,
+            "output_flag": true
+          },
+          "model_config": {
+            "depth": 3,
+            "max_window_span": 500,
+            "discrete_mode": "belong",
+            "max_rho": 200.0,
+            "big_m": 250.0
+          },
+          "model_size": {
+            "variables": 29176,
+            "linear_constraints": 18472,
+            "general_constraints": 4305,
+            "windows": 1891
+          },
+          "prediction_tie_break": "left",
+          "prediction_tolerance": 1e-06,
+          "notes": [
+            "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
+            "The original zero-margin constraints permit either branch at robustness zero.",
+            "Export thresholds may move within existing feasible intervals; see threshold_stabilization."
+          ],
+          "metadata": {
+            "warm_start_from_refactor": true
+          }
+        },
+        "raw_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.9468870959826745e-12,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 3,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        "export_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.7763568394002505e-15,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 0,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        }
+      },
+      "refactored": {
+        "summary": {
+          "status": "OPTIMAL",
+          "status_code": 2,
+          "has_incumbent": true,
+          "proven_optimal": true,
+          "runtime_seconds": 26.362508058547974,
+          "objective": 123.0,
+          "objective_bound": 123.0,
+          "mip_gap": 0.0,
+          "training_samples": 123,
+          "max_flow_training_fraction": 1.0,
+          "deterministic_training_accuracy": 1.0,
+          "tie_samples": 0,
+          "threshold_stabilization": {
+            "method": "interior_thresholds_preserving_incumbent_flow",
+            "tolerance": 1e-06,
+            "changed_nodes": [
+              {
+                "node": 0,
+                "raw_threshold": 24.46280129548508,
+                "export_threshold": 24.564062893815763,
+                "feasible_lower": 24.462801295486095,
+                "feasible_upper": 24.66532449214543,
+                "minimum_routed_absolute_robustness": 0.10126159832966763
+              },
+              {
+                "node": 6,
+                "raw_threshold": 25.775625198473907,
+                "export_threshold": 26.667893657424408,
+                "feasible_lower": 25.775625198475854,
+                "feasible_upper": 27.56016211637296,
+                "minimum_routed_absolute_robustness": 0.8922684589485534
+              }
+            ],
+            "unresolved_nodes": [],
+            "routed_branch_mismatches": 0,
+            "near_zero_routed_decisions": 0,
+            "minimum_routed_absolute_robustness": 0.046817464383224205,
+            "verified_strict_routing": true,
+            "raw_tree_training_accuracy": 0.983739837398374,
+            "raw_tree_tie_samples": 3
+          },
+          "solver_config": {
+            "time_limit": null,
+            "mip_gap": 0.0,
+            "threads": 2,
+            "seed": 42,
+            "output_flag": true
+          },
+          "model_config": {
+            "depth": 3,
+            "max_window_span": 500,
+            "discrete_mode": "belong",
+            "max_rho": 200.0,
+            "big_m": 250.0
+          },
+          "model_size": {
+            "variables": 29176,
+            "linear_constraints": 18472,
+            "general_constraints": 4305,
+            "windows": 1891
+          },
+          "prediction_tie_break": "left",
+          "prediction_tolerance": 1e-06,
+          "notes": [
+            "Max-flow fraction is an in-sample optimization statistic, not held-out accuracy.",
+            "The original zero-margin constraints permit either branch at robustness zero.",
+            "Export thresholds may move within existing feasible intervals; see threshold_stabilization."
+          ],
+          "metadata": {
+            "comparison": {
+              "identical": true,
+              "checks": {
+                "variables": true,
+                "linear_rows": true,
+                "general_constraints": true,
+                "model_sense": true,
+                "objective_constant": true,
+                "nonzeros": true
+              },
+              "variables": 29176,
+              "linear_constraints": 18472,
+              "general_constraints": 4305,
+              "nonzeros": 7182075,
+              "linear_row_sha256": "369898854fa7946b47a7825f6baf7e3df60de79b11be225c52f3745fc2e635af",
+              "samples_before_augmentation": 100,
+              "samples_after_augmentation": 123,
+              "depth": 3,
+              "windows": 1891,
+              "mode": "belong",
+              "dataset_sha256": "f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34",
+              "comparison_seconds": 5.495327781885862
+            }
+          }
+        },
+        "raw_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.9468870959826745e-12,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 3,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        },
+        "export_constraint_audit": {
+          "bound_max_violation": 0.0,
+          "integrality_max_violation": 0.0,
+          "linear_max_violation": 1.7763568394002505e-15,
+          "min_max_violation": 0.0,
+          "objective_error": 0.0,
+          "routed_samples": 123,
+          "zero_robustness_routed_decisions": 0,
+          "bad_routes": [],
+          "tolerance": 1e-05,
+          "passed": true
+        }
+      }
+    }
+  },
+  "warm_start": "Earlier full-exist tree used as a partial start; source models receive the refactored solution as a complete start. No variables fixed, no time limit, MIPGap=0."
+}

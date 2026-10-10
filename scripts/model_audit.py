@@ -152,14 +152,40 @@ def compare_models(left, right):
     }
 
 
-def audit_solution(artifacts, *, tolerance=1e-5):
+def exported_assignment(artifacts, tree):
+    """Reconstruct auxiliaries for an exported tree in the ORIGINAL formulation."""
+    values = artifacts.model.getAttr("X", artifacts.model.getVars())
+    v = artifacts.variables
+    for node, predicate in tree.nodes.items():
+        if predicate["kind"] != "continuous":
+            continue
+        threshold = predicate["threshold"]
+        values[v["threshold"][node].index] = threshold
+        a, b = predicate["window"]
+        for sample, signal in enumerate(artifacts.signals):
+            for key, operation in v["op"].items():
+                kind, feature = key
+                window = signal[feature, a : b + 1]
+                rho = threshold - window.min() if kind == "less" else window.max() - threshold
+                sign = float(rho > 0)
+                values[v["rho"][key][sample, node].index] = float(rho)
+                values[v["sign"][key][sample, node].index] = sign
+                values[v["active"][key][sample, node].index] = min(operation[node].X, sign)
+    return values
+
+
+def audit_solution(artifacts, *, tolerance=1e-5, assignment=None):
     """Re-evaluate every constraint and each routed predicate independently."""
     import gurobipy as gp
 
     model = artifacts.model
     if not model.SolCount:
         raise ValueError("No incumbent to audit")
-    values = model.getAttr("X", model.getVars())
+    values = model.getAttr("X", model.getVars()) if assignment is None else assignment
+
+    def get_value(variable):
+        return values[variable.index]
+
     bound_error = integer_error = row_error = min_error = 0.0
     for variable, value in zip(model.getVars(), values):
         bound_error = max(bound_error, variable.LB - value, value - variable.UB)
@@ -189,32 +215,36 @@ def audit_solution(artifacts, *, tolerance=1e-5):
     equality_routed = 0
     bad_routes = []
     for sample, (signal, target) in enumerate(zip(artifacts.signals, artifacts.labels)):
-        if v["source"][sample].X < 0.5:
+        if get_value(v["source"][sample]) < 0.5:
             continue
         routed += 1
         node = 0
         for _ in range(artifacts.config.depth + 1):
-            if v["sink"][sample, node].X > 0.5:
-                if v["label"][int(target), node].X <= 0.5:
+            if get_value(v["sink"][sample, node]) > 0.5:
+                if get_value(v["label"][int(target), node]) <= 0.5:
                     bad_routes.append([sample, node, "incorrect_sink"])
                 break
-            left = v["flow"][sample, 2 * node + 1].X > 0.5
-            if v["discrete"][node].X > 0.5:
+            left = get_value(v["flow"][sample, 2 * node + 1]) > 0.5
+            if get_value(v["discrete"][node]) > 0.5:
                 if artifacts.config.discrete_mode == "exist":
-                    value = signal[-1].max()
+                    truth = signal[-1].max()
                 else:
-                    a, b = next(w for w in artifacts.windows if v["window"][node][w].X > 0.5)
+                    a, b = next(
+                        w for w in artifacts.windows if get_value(v["window"][node][w]) > 0.5
+                    )
                     window = signal[-1, a : b + 1]
                     if window.min() != window.max():
                         bad_routes.append([sample, node, "nonconstant_binary_interval"])
-                    value = window.max()
-                if left != bool(value):
+                    truth = window.max()
+                if left != bool(truth):
                     bad_routes.append([sample, node, "wrong_discrete_branch"])
             else:
-                kind, feature = next(key for key, op in v["op"].items() if op[node].X > 0.5)
-                a, b = next(w for w in artifacts.windows if v["window"][node][w].X > 0.5)
+                kind, feature = next(
+                    key for key, op in v["op"].items() if get_value(op[node]) > 0.5
+                )
+                a, b = next(w for w in artifacts.windows if get_value(v["window"][node][w]) > 0.5)
                 window = signal[feature, a : b + 1]
-                threshold = v["threshold"][node].X
+                threshold = get_value(v["threshold"][node])
                 rho = threshold - window.min() if kind == "less" else window.max() - threshold
                 if abs(rho) <= tolerance:
                     equality_routed += 1

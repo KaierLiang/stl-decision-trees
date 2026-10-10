@@ -3,14 +3,70 @@
 All execution checks below ran on the remote `lab` machine on **2026-10-10**.
 No local Python tests, local optimization, or GitHub-hosted tests were run.
 
-**Current conclusion:** both complete naval variants and both original source
-models reach the same proven flow optimum, and the formulations match coefficient
-for coefficient. However, a confirmed defect in the inherited zero-margin routing
-means this objective can overcount deterministic classification. The code cannot
-yet be certified as a correct deterministic-classification learner. The original
-ECG file is also unavailable; that full experiment has not been validated.
+**Scope:** naval only, under the author's stated noisy-data/nonzero-robustness
+assumption. ECG is not a required experiment. The original training formulation,
+data, hypothesis space, and all temporal windows are preserved.
 
-## Full audit after the initial time-limited checks
+**Current conclusion:** complete solves for both naval variants and both original
+source models prove the same optimum. Numerically stable threshold export makes
+deterministic predictions agree with all 123 admitted sample flows. The exported
+assignments satisfy every original constraint and retain the optimal objective.
+This validates the recorded naval runs; it is not a universal correctness proof
+or a claim about held-out accuracy or reproduction of every paper experiment.
+
+## Nonzero-robustness verification
+
+The initial raw export's 121/123 score was investigated after the author clarified
+the assumption. Its three near-zero routed decisions had robustness around
+`1.02e-12` or `1.95e-12`, rather than exact floating-point zero. Prediction with
+zero tolerance still gave 121/123: the solver's feasible numerical solution had
+routed these small positive values right. This alone did **not** establish an
+unavoidable gap between the optimal flow and achievable strict classification.
+
+All relevant nodes had a nonempty strict threshold interval preserving the
+incumbent's routing. Export now selects an interior threshold only at such
+numerical boundaries, retaining the original variable/robustness bounds and
+recording both raw and exported values. It introduces no new margin constraint.
+
+| Complete model | Proven optimum / bound | Exported correct predictions | Prediction ties |
+| --- | ---: | ---: | ---: |
+| Refactored `exist` | 123 / 123 | 123/123 | 0 |
+| Original `exist`, same export processing | 123 / 123 | 123/123 | 0 |
+| Refactored `belong` | 123 / 123 | 123/123 | 0 |
+| Original `belong`, same export processing | 123 / 123 | 123/123 | 0 |
+
+The same complete instances below were rerun with no time limit and zero MIP gap,
+using the earlier incumbent as a MIP start without fixing any model variables.
+Every variable, linear row, MIN constraint, and objective was compared against
+the original source again. Independent audits reconstructed the exported
+thresholds' auxiliary variables and checked all original constraints, bounds,
+integrality, objectives, and sample routes. Raw solver trees remain available;
+the original model/solver assignment is not overwritten by export.
+Across all four exports, minimum absolute routed continuous robustness is
+`0.046817464383224205`; the largest linear constraint violation is approximately
+`1.78e-15`. Every admitted sample follows the same branch as its incumbent flow.
+
+Evidence: [complete nonzero naval audit](validation/nonzero-naval-audit.json),
+[raw boundary diagnostic](validation/naval-boundary-audit.json), and portable
+[`exist` tree](validation/naval-exist-tree.json) /
+[`belong` tree](validation/naval-belong-tree.json).
+
+After this change, **26 tests passed** on the remote lab, including both
+operations/variants, preservation of bounds for unselected features, full
+constraint audits, raw-tree export, and refusal to certify a collapsed strict
+interval. The equality counterexample remains a passing boundary-detection test
+outside the nonzero-robustness assumption, not a claimed supported data case.
+
+The rebuilt wheel and source distribution also pass packaging checks, and all
+six notebook code cells execute. **The small depth-1 quickstart is not a strict
+routing validation:** its optimum uses an equality boundary with no open interval
+for the same flows. A depth-2 diagnostic also retains an unresolved boundary.
+Both are reported as unverified by the new check; neither substitutes for the
+complete depth-3 naval results above. Threshold stabilization does not search
+for a different tree or silently change the training formulation when an
+incumbent violates the nonzero-robustness assumption.
+
+## Initial raw export audit (historical)
 
 The user requested complete runs instead of stopping at a solver time limit.
 The follow-up retains **100 original samples, 123 after augmentation, depth 3,
@@ -41,8 +97,9 @@ types, bounds, objective coefficients, linear row senses/RHS/coefficient multise
 MIN operands/constants, objective sense, and objective constant. This covers
 **6,571,444 nonzero coefficients for `exist` and 7,182,075 for `belong`**. Each
 complete solution was then independently checked against every constraint and
-its sample flow paths. These checks enforce the inherited equations, including
-their ambiguous equality behavior; they do not excuse that semantic defect.
+its sample flow paths. These historical checks enforce the inherited equations,
+which allow equality. Strict routing is verified separately in the newer audit
+above under the author's clarified assumption.
 
 Evidence:
 
@@ -52,7 +109,7 @@ Evidence:
 - [Full `belong` coefficient comparison](validation/full-model-belong.json)
 - [Counterexample in all four implementations](validation/equality-counterexample.json)
 
-### Defect reproduced independently
+### Equality boundary case outside the stated assumption
 
 Two identical inputs have continuous channels `[1,1]` and `[2,2]`, the same binary
 channel `[0,0]`, and opposite labels 0 and 1. Every deterministic classifier must
@@ -60,9 +117,11 @@ give them the same prediction, so at most one can be correct. Both original
 models and both refactored models nevertheless prove a flow objective of two by
 routing the samples in opposite directions at a zero-robustness predicate.
 
-This is a correctness counterexample, not a synthetic performance benchmark.
-The original constraints remain unchanged pending agreement on a formulation
-change. Merely achieving zero MIP gap does not resolve it.
+This is a counterexample if arbitrary zero robustness is allowed, not a
+synthetic performance benchmark or evidence against the method under the
+author's nonzero-robustness assumption. The original constraints remain
+unchanged. Export detects that its strict interval is empty and does not
+misrepresent this boundary case as verified strict classification.
 
 ### Refactoring bug fixed
 
@@ -75,15 +134,15 @@ the previous implementation and passes after the repair.
 After the repair, **22 tests passed in 4.44 seconds** on the remote lab. Added
 checks include an independent exhaustive depth-1 oracle, depth-2 coefficient
 comparisons, multiclass/noncontiguous labels at depth zero, immutable input
-snapshots, and the known equality counterexample. The latter records a confirmed
-defect; its passing test is not evidence that the defect has been fixed.
+snapshots, and the equality counterexample. The latter records behavior outside
+the stated assumption; its passing test is not a supported-case accuracy result.
 
 ```bash
 # Complete source/refactor solves, with every original candidate available.
 python scripts/full_validation.py --mode exist --output outputs/full-exist-audit
 python scripts/full_validation.py --mode belong --output outputs/full-belong-audit
 
-# Reproduce the known semantic defect without running a large experiment.
+# Inspect an equality boundary case outside the stated assumption.
 python scripts/reproduce_equality_issue.py --output outputs/equality-issue
 ```
 

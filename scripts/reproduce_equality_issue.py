@@ -1,4 +1,4 @@
-"""Expose the inherited zero-margin classification defect in both source variants."""
+"""Check an equality case outside the stated nonzero-robustness assumption."""
 
 import argparse
 import json
@@ -19,6 +19,7 @@ def main():
     x = np.array([[[1, 1], [2, 2], [0, 0]], [[1, 1], [2, 2], [0, 0]]], dtype=float)
     y = np.array([0, 1])
     evidence = {
+        "scope": "boundary check outside the intended nonzero-robustness assumption",
         "signals": x.tolist(),
         "labels": y.tolist(),
         "deterministic_classifier_upper_bound": 1,

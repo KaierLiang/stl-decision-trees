@@ -13,17 +13,18 @@ reusable Python modules. It contains the **exist** and **temporal belong** varia
 the naval dataset, a CLI, a Python API, and the original scripts for comparison.
 
 > **Scope.** This is a refactoring of the supplied experiment code, not a claim
-> that every paper experiment has been reproduced. The ECG data are not included.
+> that every paper experiment has been reproduced. Validation is **naval only**;
+> historical ECG references are outside the current scope.
 > The supplied augmentation changes both data and labels; the legacy experiment
 > pools the original train/test splits. See [experiment semantics](docs/semantics.md)
 > before interpreting any score. Gurobi and a suitable license are required to train.
 
-> **Confirmed formulation defect.** The original zero-margin routing can count
-> identical inputs with opposite labels as two correct classifications. Full naval
-> solves reach a proven flow optimum of 123/123, while the saved trees predict
-> 121/123 under the documented tie policy. The refactor matches the original
-> equations; this does **not** establish that the inherited objective is correct
-> for deterministic classification. See the [full audit](docs/validation.md).
+> **Routing assumption.** The intended setting assumes noisy data and excludes
+> zero robustness. The original zero-margin MILP is preserved. Export chooses
+> an interior threshold when it can remove a numerical boundary while preserving
+> the incumbent's routing and original bounds; raw thresholds are also saved.
+> Unresolvable boundaries are reported, not discarded. See the
+> [full naval audit](docs/validation.md) and [semantics](docs/semantics.md).
 
 ## Install
 
@@ -62,6 +63,9 @@ This example samples **12 real training trajectories**, applies the original
 augmentation, and learns a depth-1 tree with a 30-second solver limit. It retains
 **all 1,891 temporal windows**. It is an onboarding example, not paper validation.
 Use a fresh output directory for every run.
+This deliberately small depth-1 example can return an equality solution outside
+the nonzero-robustness assumption. Inspect the strict-routing diagnostic below;
+the [complete naval verification](docs/validation.md) uses the depth-3 legacy preset.
 
 ### 3. Read the result
 
@@ -72,6 +76,7 @@ outputs/quickstart/
 ├── summary.json          # status, objective, bound, gap, timing, and separate scores
 ├── solver.log            # solver output (when logging is enabled)
 ├── tree.json             # portable tree; only present when an incumbent exists
+├── tree-raw.json          # original solver thresholds, before numerical stabilization
 └── tree.txt              # readable active tree
 ```
 
@@ -80,6 +85,10 @@ outputs/quickstart/
 left-branch tie policy. These can differ: the original MILP allows either branch
 at zero robustness. `tie_samples` counts affected samples on the prediction path.
 Always check `status`, `has_incumbent`, `objective_bound`, and `mip_gap`.
+Also check `threshold_stabilization.verified_strict_routing`. The report records
+every threshold adjustment and any unresolved boundary. Set `stabilize=False`
+in the Python `solve` call for raw export, or when adding custom constraints or
+objectives that restrict threshold postprocessing.
 
 ### 4. Reuse a saved tree without starting a solver
 
@@ -137,7 +146,9 @@ Runnable versions: [CLI example](examples/train_naval.py),
 | --- | --- | --- | --- | --- |
 | `naval_quickstart.json` | train / 12 | 1 | exist | 30-second onboarding run |
 | `naval_legacy.json` | combined / 100 | 3 | belong | source naval configuration |
-| `ecg_legacy.json` | combined / 200 | 3 | exist | source ECG configuration; data missing |
+
+The historical `ecg_legacy.json` preset is retained for provenance; ECG is not
+part of the current validation or release scope.
 
 ```bash
 # Original naval data settings and model constants; explicit solver budget.
@@ -188,6 +199,7 @@ src/stl_tree/
   config.py        # model constants and solver controls
   primitives.py    # tree indexing, temporal windows, cached extrema
   model.py         # tree / flow / primitive / routing constraint blocks
+  postprocess.py   # stable threshold export and strict-routing diagnostics
   solution.py      # status-safe extraction, serialization, prediction
   cli.py           # inspect, convert, train
 configs/           # explicit experiment settings

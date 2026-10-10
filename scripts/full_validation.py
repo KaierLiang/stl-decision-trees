@@ -10,7 +10,13 @@ import time
 from pathlib import Path
 
 import numpy as np
-from model_audit import audit_solution, canonical_variables, compare_models, original_artifacts
+from model_audit import (
+    audit_solution,
+    canonical_variables,
+    compare_models,
+    exported_assignment,
+    original_artifacts,
+)
 
 from stl_tree import (
     ModelConfig,
@@ -87,6 +93,15 @@ def main():
         (args.output / "refactored-audit.json").write_text(json.dumps(first_audit, indent=2) + "\n")
         if not first_audit["passed"]:
             raise AssertionError(f"Refactored solution audit failed: {first_audit}")
+        export_audit = audit_solution(
+            artifacts, assignment=exported_assignment(artifacts, result.tree)
+        )
+        (args.output / "refactored-export-audit.json").write_text(
+            json.dumps(export_audit, indent=2) + "\n"
+        )
+        assert export_audit["passed"]
+        assert result.threshold_stabilization["verified_strict_routing"]
+        assert abs(result.deterministic_training_accuracy * len(y) - result.objective) <= 1e-6
         artifacts.model.write(str(args.output / "refactored.sol"))
         # A full MIP start accelerates the independent source solve without fixing
         # any variables or changing its feasible set, objective, or proof bound.
@@ -100,6 +115,21 @@ def main():
             json.dumps(original_audit, indent=2) + "\n"
         )
         assert original_audit["passed"]
+        original_export_audit = audit_solution(
+            original, assignment=exported_assignment(original, reference_result.tree)
+        )
+        (args.output / "original-export-audit.json").write_text(
+            json.dumps(original_export_audit, indent=2) + "\n"
+        )
+        assert original_export_audit["passed"]
+        assert reference_result.threshold_stabilization["verified_strict_routing"]
+        assert (
+            abs(
+                reference_result.deterministic_training_accuracy * len(y)
+                - reference_result.objective
+            )
+            <= 1e-6
+        )
         assert result.proven_optimal and reference_result.proven_optimal
         assert abs(result.objective - reference_result.objective) <= 1e-6
         print(

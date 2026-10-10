@@ -74,8 +74,8 @@ def test_independent_exhaustive_stump_matches_milp(mode):
 
 
 def test_known_zero_margin_ambiguity_can_split_identical_inputs():
-    # A correctness counterexample for deterministic classification in the
-    # inherited formulation, explicitly retained rather than hidden as accuracy.
+    # Outside the author's nonzero-robustness assumption: retain this boundary
+    # check so unsupported equalities cannot silently become verified exports.
     x = np.array([[[1, 1], [0, 0]], [[1, 1], [0, 0]]], dtype=float)
     artifacts = build_model(x, [0, 1], ModelConfig(depth=1))
     try:
@@ -83,6 +83,8 @@ def test_known_zero_margin_ambiguity_can_split_identical_inputs():
         assert result.proven_optimal and result.objective == pytest.approx(2)
         assert result.deterministic_training_accuracy == pytest.approx(0.5)
         assert result.tie_samples == 2
+        assert not result.threshold_stabilization["verified_strict_routing"]
+        assert result.threshold_stabilization["unresolved_nodes"]
     finally:
         artifacts.model.dispose()
 
@@ -132,6 +134,9 @@ def test_every_constraint_matches_source_at_depth_two(mode):
         result = solve(refactored, SolverConfig(output_flag=False))
         assert result.proven_optimal
         assert audit["audit_solution"](refactored)["passed"]
+        assert audit["audit_solution"](
+            refactored, assignment=audit["exported_assignment"](refactored, result.tree)
+        )["passed"]
     finally:
         original.model.dispose()
         refactored.model.dispose()

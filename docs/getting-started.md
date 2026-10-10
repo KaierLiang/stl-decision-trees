@@ -51,12 +51,11 @@ the numeric data match.
 | Symptom | Action |
 | --- | --- |
 | License error or model too large for the license | Configure a suitable Gurobi license on the compute machine. Even the quickstart keeps all 1,891 windows. |
-| `FileNotFoundError` for ECG | Supply the original `ecg200_data.pickle`; this file was not part of the provided source. |
 | Pickle opt-in error | Use `--trust-pickle` only for trusted input, or use NPZ. |
 | Output directory already exists | Choose a new `--output` directory; runs do not overwrite earlier evidence. |
 | `TIME_LIMIT` with an incumbent | Inspect the bound and gap. The saved tree is a feasible incumbent, not necessarily optimal. |
 | No incumbent | Read `summary.json` and the solver log; no tree is exported. CLI exit status is 2. |
-| Flow score differs from prediction accuracy | Check `tie_samples`; the inherited zero-margin formulation leaves equality ambiguous. |
+| Flow score differs from prediction accuracy | Inspect `threshold_stabilization`, `tree-raw.json`, and `tie_samples`; equality is excluded by the intended assumption but can occur in solver output. |
 | Nonconstant binary channel in `belong` prediction | The inherited model equates both the interval min and max; see [semantics](semantics.md). |
 | Unexpected infeasibility on differently scaled data | Check nonnegative thresholds, `max_rho`, and `big_m`; bounds affect the feasible model. |
 

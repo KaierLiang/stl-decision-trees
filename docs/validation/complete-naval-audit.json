@@ -1,12 +1,10 @@
 {
   "date": "2026-10-10",
   "environment": "remote lab",
+  "validation_scope": "naval_only",
+  "interpretation": "Historical raw exports before numerical stabilization; see nonzero-naval-audit.json for verification under the author's nonzero-robustness assumption.",
   "source_refactor_equivalence": true,
-  "deterministic_classification_correctness": false,
-  "unresolved": [
-    "Inherited zero-margin routing can overcount deterministic classification",
-    "Original ECG dataset unavailable"
-  ],
+  "raw_export_predictions_match_flow": false,
   "cases": {
     "exist": {
       "refactored": {

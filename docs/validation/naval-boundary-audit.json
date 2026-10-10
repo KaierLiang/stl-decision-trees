@@ -1,0 +1,219 @@
+{
+  "validation_scope": "naval_only",
+  "models": {
+    "exist": {
+      "accuracy_zero_tolerance": 0.983739837398374,
+      "accuracy_default_tolerance": 0.983739837398374,
+      "tie_samples_zero_tolerance": 0,
+      "tie_samples_default_tolerance": 3,
+      "continuous_nodes": [
+        {
+          "node": 0,
+          "feature": 0,
+          "window": [
+            42,
+            55
+          ],
+          "operation": "greater",
+          "threshold": 24.46280129548508,
+          "flow_left_samples": 24,
+          "flow_right_samples": 99,
+          "strict_threshold_lower_bound": 24.462801295486095,
+          "strict_threshold_upper_bound": 24.66532449214543,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": [
+            {
+              "augmented_sample": 24,
+              "source_index_in_combined_data": 1922,
+              "label": 1,
+              "binary_channel": 0,
+              "flow_branch": "right",
+              "threshold": 24.46280129548508,
+              "extremum": 24.462801295486095,
+              "robustness": 1.0160761121369433e-12,
+              "exact_float_equality": false
+            },
+            {
+              "augmented_sample": 110,
+              "source_index_in_combined_data": 1922,
+              "label": 0,
+              "binary_channel": 1,
+              "flow_branch": "right",
+              "threshold": 24.46280129548508,
+              "extremum": 24.462801295486095,
+              "robustness": 1.0160761121369433e-12,
+              "exact_float_equality": false
+            }
+          ]
+        },
+        {
+          "node": 1,
+          "feature": 1,
+          "window": [
+            32,
+            50
+          ],
+          "operation": "greater",
+          "threshold": 28.749641390368875,
+          "flow_left_samples": 20,
+          "flow_right_samples": 4,
+          "strict_threshold_lower_bound": 27.220706978113924,
+          "strict_threshold_upper_bound": 28.7964588547521,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": []
+        },
+        {
+          "node": 4,
+          "feature": 0,
+          "window": [
+            15,
+            27
+          ],
+          "operation": "greater",
+          "threshold": 39.131845143539955,
+          "flow_left_samples": 4,
+          "flow_right_samples": 0,
+          "strict_threshold_lower_bound": null,
+          "strict_threshold_upper_bound": 52.60595078678201,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": []
+        },
+        {
+          "node": 6,
+          "feature": 1,
+          "window": [
+            12,
+            12
+          ],
+          "operation": "greater",
+          "threshold": 25.775625198473907,
+          "flow_left_samples": 43,
+          "flow_right_samples": 33,
+          "strict_threshold_lower_bound": 25.775625198475854,
+          "strict_threshold_upper_bound": 27.56016211637296,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": [
+            {
+              "augmented_sample": 19,
+              "source_index_in_combined_data": 1852,
+              "label": 0,
+              "binary_channel": 0,
+              "flow_branch": "right",
+              "threshold": 25.775625198473907,
+              "extremum": 25.775625198475854,
+              "robustness": 1.9468870959826745e-12,
+              "exact_float_equality": false
+            }
+          ]
+        }
+      ]
+    },
+    "belong": {
+      "accuracy_zero_tolerance": 0.983739837398374,
+      "accuracy_default_tolerance": 0.983739837398374,
+      "tie_samples_zero_tolerance": 0,
+      "tie_samples_default_tolerance": 3,
+      "continuous_nodes": [
+        {
+          "node": 0,
+          "feature": 0,
+          "window": [
+            42,
+            55
+          ],
+          "operation": "greater",
+          "threshold": 24.46280129548508,
+          "flow_left_samples": 24,
+          "flow_right_samples": 99,
+          "strict_threshold_lower_bound": 24.462801295486095,
+          "strict_threshold_upper_bound": 24.66532449214543,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": [
+            {
+              "augmented_sample": 24,
+              "source_index_in_combined_data": 1922,
+              "label": 1,
+              "binary_channel": 0,
+              "flow_branch": "right",
+              "threshold": 24.46280129548508,
+              "extremum": 24.462801295486095,
+              "robustness": 1.0160761121369433e-12,
+              "exact_float_equality": false
+            },
+            {
+              "augmented_sample": 110,
+              "source_index_in_combined_data": 1922,
+              "label": 0,
+              "binary_channel": 1,
+              "flow_branch": "right",
+              "threshold": 24.46280129548508,
+              "extremum": 24.462801295486095,
+              "robustness": 1.0160761121369433e-12,
+              "exact_float_equality": false
+            }
+          ]
+        },
+        {
+          "node": 1,
+          "feature": 1,
+          "window": [
+            32,
+            50
+          ],
+          "operation": "greater",
+          "threshold": 28.749641390368875,
+          "flow_left_samples": 20,
+          "flow_right_samples": 4,
+          "strict_threshold_lower_bound": 27.220706978113924,
+          "strict_threshold_upper_bound": 28.7964588547521,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": []
+        },
+        {
+          "node": 4,
+          "feature": 0,
+          "window": [
+            15,
+            27
+          ],
+          "operation": "greater",
+          "threshold": 39.131845143539955,
+          "flow_left_samples": 4,
+          "flow_right_samples": 0,
+          "strict_threshold_lower_bound": null,
+          "strict_threshold_upper_bound": 52.60595078678201,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": []
+        },
+        {
+          "node": 6,
+          "feature": 1,
+          "window": [
+            12,
+            12
+          ],
+          "operation": "greater",
+          "threshold": 25.775625198473907,
+          "flow_left_samples": 43,
+          "flow_right_samples": 33,
+          "strict_threshold_lower_bound": 25.775625198475854,
+          "strict_threshold_upper_bound": 27.56016211637296,
+          "open_interval_nonempty": true,
+          "near_zero_routed_decisions": [
+            {
+              "augmented_sample": 19,
+              "source_index_in_combined_data": 1852,
+              "label": 0,
+              "binary_channel": 0,
+              "flow_branch": "right",
+              "threshold": 25.775625198473907,
+              "extremum": 25.775625198475854,
+              "robustness": 1.9468870959826745e-12,
+              "exact_float_equality": false
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
