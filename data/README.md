@@ -12,8 +12,7 @@ It contains a four-element list:
 
 Axes are sample, feature, and time. The loader maps `-1` to `0` without rescaling
 or resampling signals. The original data generation source, channel units, and
-redistribution terms were not supplied with this attachment and are not invented
-here. Verify them before any public release.
+any data-specific upstream terms are not documented in the supplied files.
 
 SHA-256 of the supplied pickle:
 `f7d8a3fddfe9f0a4b7131da3832e3b7777a338822cde40d1fa2ca39529e25d34`.

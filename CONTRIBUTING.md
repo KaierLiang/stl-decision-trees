@@ -1,6 +1,6 @@
 # Contributing
 
-Use a private branch and describe the behavior changed by each patch. Preserve
+Use a feature branch and describe the behavior changed by each patch. Preserve
 the original model semantics unless a formulation change is explicitly intended
 and documented. In particular, do not silently change the data augmentation,
 window family, objective, threshold bounds, or equality routing.

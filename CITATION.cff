@@ -3,6 +3,7 @@ message: "If you use this code, please cite the accompanying paper."
 title: "Learning Optimal Signal Temporal Logic Decision Trees for Classification: A Max-Flow MILP Formulation"
 type: software
 version: 0.1.0
+license: MIT
 repository-code: "https://github.com/KaierLiang/stl-decision-trees"
 url: "https://arxiv.org/abs/2407.21090"
 authors:
@@ -15,7 +16,7 @@ authors:
   - family-names: Vasile
     given-names: Cristian-Ioan
 preferred-citation:
-  type: article
+  type: conference-paper
   title: "Learning Optimal Signal Temporal Logic Decision Trees for Classification: A Max-Flow MILP Formulation"
   authors:
     - family-names: Liang
@@ -27,5 +28,9 @@ preferred-citation:
     - family-names: Vasile
       given-names: Cristian-Ioan
   year: 2024
+  collection-title: "2024 IEEE 63rd Conference on Decision and Control (CDC)"
+  start: 8332
+  end: 8337
+  publisher:
+    name: IEEE
   url: "https://arxiv.org/abs/2407.21090"
-  doi: "10.48550/arXiv.2407.21090"
